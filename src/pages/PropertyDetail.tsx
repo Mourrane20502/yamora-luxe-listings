@@ -1,10 +1,11 @@
 import { useState } from "react";
 import { useParams, Link } from "react-router-dom";
-import { ArrowLeft, Bed, Bath, Maximize, MapPin, Check, ChevronLeft, ChevronRight, Phone, Mail } from "lucide-react";
+import { Bed, Bath, Maximize, MapPin, Check, ChevronLeft, ChevronRight, Phone, Mail } from "lucide-react";
 import { properties } from "@/data/properties";
 import PropertyCard from "@/components/PropertyCard";
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
+import PageHeader from "@/components/layout/PageHeader";
 
 const PropertyDetail = () => {
   const { id } = useParams();
@@ -16,11 +17,9 @@ const PropertyDetail = () => {
     return (
       <div className="min-h-screen">
         <Header />
-        <div className="pt-32 pb-20 text-center">
-          <h1 className="text-2xl font-serif text-foreground mb-4">Bien non trouvé</h1>
-          <Link to="/biens" className="text-gold font-sans text-sm hover:underline">
-            ← Retour aux biens
-          </Link>
+        <PageHeader title="Bien non trouvé" breadcrumbs={[{ label: "Nos Biens", path: "/biens" }, { label: "Non trouvé" }]} />
+        <div className="py-16 text-center">
+          <Link to="/biens" className="text-gold font-sans text-sm hover:underline">← Retour aux biens</Link>
         </div>
         <Footer />
       </div>
@@ -46,24 +45,17 @@ const PropertyDetail = () => {
     <div className="min-h-screen">
       <Header />
 
-      <div className="pt-24 pb-4 bg-warm-beige">
-        <div className="container mx-auto px-4 lg:px-8">
-          <Link to="/biens" className="inline-flex items-center gap-2 text-sm font-sans text-muted-foreground hover:text-gold transition-colors">
-            <ArrowLeft className="h-4 w-4" />
-            Retour aux biens
-          </Link>
-        </div>
-      </div>
+      <PageHeader
+        title={property.title}
+        subtitle={property.location}
+        breadcrumbs={[{ label: "Nos Biens", path: "/biens" }, { label: property.title }]}
+      />
 
       {/* Gallery */}
-      <section className="bg-warm-beige pb-8">
+      <section className="bg-warm-white py-8">
         <div className="container mx-auto px-4 lg:px-8">
-          <div className="relative rounded-xl overflow-hidden aspect-[16/9] max-h-[600px]">
-            <img
-              src={property.images[currentImage]}
-              alt={property.title}
-              className="w-full h-full object-cover"
-            />
+          <div className="relative rounded-lg overflow-hidden aspect-[16/9] max-h-[500px]">
+            <img src={property.images[currentImage]} alt={property.title} className="w-full h-full object-cover" />
             <button onClick={prevImage} className="absolute left-4 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-card/80 backdrop-blur-sm flex items-center justify-center hover:bg-card transition-colors">
               <ChevronLeft className="h-5 w-5 text-foreground" />
             </button>
@@ -72,21 +64,15 @@ const PropertyDetail = () => {
             </button>
             <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-2">
               {property.images.map((_, i) => (
-                <button
-                  key={i}
-                  onClick={() => setCurrentImage(i)}
-                  className={`w-2.5 h-2.5 rounded-full transition-colors ${i === currentImage ? "bg-gold" : "bg-card/60"}`}
-                />
+                <button key={i} onClick={() => setCurrentImage(i)}
+                  className={`w-2.5 h-2.5 rounded-full transition-colors ${i === currentImage ? "bg-gold" : "bg-card/60"}`} />
               ))}
             </div>
           </div>
-          <div className="flex gap-3 mt-4">
+          <div className="flex gap-3 mt-3">
             {property.images.map((img, i) => (
-              <button
-                key={i}
-                onClick={() => setCurrentImage(i)}
-                className={`rounded-lg overflow-hidden w-24 h-16 border-2 transition-colors ${i === currentImage ? "border-gold" : "border-transparent"}`}
-              >
+              <button key={i} onClick={() => setCurrentImage(i)}
+                className={`rounded-lg overflow-hidden w-24 h-16 border-2 transition-colors ${i === currentImage ? "border-gold" : "border-transparent"}`}>
                 <img src={img} alt="" className="w-full h-full object-cover" loading="lazy" />
               </button>
             ))}
@@ -99,21 +85,14 @@ const PropertyDetail = () => {
         <div className="container mx-auto px-4 lg:px-8">
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-12">
             <div className="lg:col-span-2">
-              <div className="mb-8">
-                <span className="inline-block px-3 py-1 bg-gold text-accent-foreground text-xs font-sans font-semibold tracking-wider uppercase rounded mb-4">
+              <div className="mb-6">
+                <span className="inline-block px-3 py-1 bg-gold text-accent-foreground text-xs font-sans font-semibold tracking-wider uppercase rounded mb-3">
                   {property.type}
                 </span>
-                <h1 className="text-3xl md:text-4xl font-serif font-bold text-foreground mb-3">
-                  {property.title}
-                </h1>
-                <div className="flex items-center gap-2 text-muted-foreground mb-4">
-                  <MapPin className="h-4 w-4 text-gold" />
-                  <span className="text-sm font-sans">{property.location}</span>
-                </div>
                 <p className="text-2xl font-serif font-bold text-gold">{property.price}</p>
               </div>
 
-              <div className="flex items-center gap-8 p-6 bg-secondary rounded-lg mb-8">
+              <div className="flex items-center gap-8 p-5 bg-secondary rounded-lg mb-8">
                 {property.bedrooms > 0 && (
                   <div className="flex items-center gap-3">
                     <Bed className="h-5 w-5 text-gold" />
@@ -140,12 +119,12 @@ const PropertyDetail = () => {
               </div>
 
               <div className="mb-8">
-                <h2 className="text-xl font-serif font-semibold text-foreground mb-4">Description</h2>
+                <h2 className="text-lg font-serif font-semibold text-foreground mb-3">Description</h2>
                 <p className="text-sm font-sans text-muted-foreground leading-relaxed">{property.description}</p>
               </div>
 
               <div className="mb-8">
-                <h2 className="text-xl font-serif font-semibold text-foreground mb-4">Équipements & Prestations</h2>
+                <h2 className="text-lg font-serif font-semibold text-foreground mb-3">Équipements & Prestations</h2>
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
                   {property.amenities.map((amenity, i) => (
                     <div key={i} className="flex items-center gap-2 text-sm font-sans text-muted-foreground">
@@ -156,12 +135,11 @@ const PropertyDetail = () => {
                 </div>
               </div>
 
-              {/* Map placeholder */}
-              <div className="mb-8">
-                <h2 className="text-xl font-serif font-semibold text-foreground mb-4">Localisation</h2>
+              <div>
+                <h2 className="text-lg font-serif font-semibold text-foreground mb-3">Localisation</h2>
                 <div className="aspect-[16/9] bg-secondary rounded-lg flex items-center justify-center">
                   <div className="text-center">
-                    <MapPin className="h-10 w-10 text-gold mx-auto mb-2" />
+                    <MapPin className="h-8 w-8 text-gold mx-auto mb-2" />
                     <p className="text-sm font-sans text-muted-foreground">{property.location}</p>
                   </div>
                 </div>
@@ -170,51 +148,30 @@ const PropertyDetail = () => {
 
             {/* Inquiry Form */}
             <div className="lg:col-span-1">
-              <div className="sticky top-28 bg-card border border-border rounded-lg p-8">
-                <h3 className="text-lg font-serif font-semibold text-foreground mb-2">Intéressé par ce bien ?</h3>
-                <p className="text-sm font-sans text-muted-foreground mb-6">
-                  Remplissez le formulaire ci-dessous et un conseiller vous recontactera rapidement.
+              <div className="sticky top-[9rem] bg-card border border-border rounded-lg p-6">
+                <h3 className="text-base font-serif font-semibold text-foreground mb-2">Intéressé par ce bien ?</h3>
+                <p className="text-sm font-sans text-muted-foreground mb-5">
+                  Remplissez le formulaire et un conseiller vous recontactera rapidement.
                 </p>
-                <form onSubmit={handleSubmit} className="flex flex-col gap-4">
-                  <input
-                    type="text"
-                    placeholder="Votre nom"
-                    required
-                    value={formData.name}
+                <form onSubmit={handleSubmit} className="flex flex-col gap-3">
+                  <input type="text" placeholder="Votre nom" required value={formData.name}
                     onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                    className="px-4 py-3 rounded bg-secondary text-foreground font-sans text-sm border-0 outline-none placeholder:text-muted-foreground"
-                  />
-                  <input
-                    type="email"
-                    placeholder="Votre email"
-                    required
-                    value={formData.email}
+                    className="px-4 py-2.5 rounded bg-secondary text-foreground font-sans text-sm border-0 outline-none placeholder:text-muted-foreground" />
+                  <input type="email" placeholder="Votre email" required value={formData.email}
                     onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                    className="px-4 py-3 rounded bg-secondary text-foreground font-sans text-sm border-0 outline-none placeholder:text-muted-foreground"
-                  />
-                  <input
-                    type="tel"
-                    placeholder="Votre téléphone"
-                    value={formData.phone}
+                    className="px-4 py-2.5 rounded bg-secondary text-foreground font-sans text-sm border-0 outline-none placeholder:text-muted-foreground" />
+                  <input type="tel" placeholder="Votre téléphone" value={formData.phone}
                     onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
-                    className="px-4 py-3 rounded bg-secondary text-foreground font-sans text-sm border-0 outline-none placeholder:text-muted-foreground"
-                  />
-                  <textarea
-                    placeholder="Votre message..."
-                    rows={4}
-                    value={formData.message}
+                    className="px-4 py-2.5 rounded bg-secondary text-foreground font-sans text-sm border-0 outline-none placeholder:text-muted-foreground" />
+                  <textarea placeholder="Votre message..." rows={4} value={formData.message}
                     onChange={(e) => setFormData({ ...formData, message: e.target.value })}
-                    className="px-4 py-3 rounded bg-secondary text-foreground font-sans text-sm border-0 outline-none placeholder:text-muted-foreground resize-none"
-                  />
-                  <button
-                    type="submit"
-                    className="w-full py-3 bg-gold text-accent-foreground font-sans font-semibold text-sm tracking-wider uppercase rounded hover:opacity-90 transition-opacity"
-                  >
+                    className="px-4 py-2.5 rounded bg-secondary text-foreground font-sans text-sm border-0 outline-none placeholder:text-muted-foreground resize-none" />
+                  <button type="submit"
+                    className="w-full py-3 bg-gold text-accent-foreground font-sans font-semibold text-sm tracking-wider uppercase rounded hover:opacity-90 transition-opacity">
                     Envoyer ma Demande
                   </button>
                 </form>
-
-                <div className="mt-6 pt-6 border-t border-border">
+                <div className="mt-5 pt-5 border-t border-border">
                   <p className="text-xs font-sans text-muted-foreground mb-3">Ou contactez-nous directement :</p>
                   <div className="flex flex-col gap-2">
                     <a href="tel:+212500000000" className="flex items-center gap-2 text-sm font-sans text-foreground hover:text-gold transition-colors">
@@ -232,9 +189,9 @@ const PropertyDetail = () => {
       </section>
 
       {/* Similar */}
-      <section className="py-16 bg-card">
+      <section className="py-12 bg-card border-t border-border">
         <div className="container mx-auto px-4 lg:px-8">
-          <h2 className="text-2xl font-serif font-semibold text-foreground mb-8">Biens Similaires</h2>
+          <h2 className="text-xl font-serif font-semibold text-foreground mb-8">Biens Similaires</h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {similar.map((p) => (
               <PropertyCard key={p.id} property={p} />
