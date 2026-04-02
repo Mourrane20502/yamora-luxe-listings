@@ -69,7 +69,7 @@ const Header = () => {
         <div className="container mx-auto px-4 lg:px-8">
           <div className="flex items-center justify-between h-20">
             <Link to="/" className="flex items-center gap-2">
-              <img src={logo} alt="Yamora Résidence" className="h-[75px] w-auto" />
+              <img src={logo} alt="Yamora Résidence" className="h-[85px] w-auto" />
             </Link>
 
             <nav className="hidden lg:flex items-center gap-1">
