@@ -1,7 +1,8 @@
 import { Link } from "react-router-dom";
-import { Key, Building2, Handshake, TrendingUp, Home, FileText, ChevronRight } from "lucide-react";
+import { Key, Building2, Handshake, TrendingUp, Home, FileText, ChevronRight, ArrowRight } from "lucide-react";
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
+import PageHeader from "@/components/layout/PageHeader";
 
 const services = [
   {
@@ -47,24 +48,20 @@ const Services = () => {
     <div className="min-h-screen">
       <Header />
 
-      <section className="pt-28 pb-16 bg-warm-beige">
-        <div className="container mx-auto px-4 lg:px-8">
-          <p className="text-gold font-sans text-sm tracking-[0.2em] uppercase mb-3">Nos Services</p>
-          <h1 className="text-3xl md:text-5xl font-serif font-bold text-foreground mb-4">
-            Des Services d'Excellence
-          </h1>
-          <div className="w-16 h-[2px] bg-gold" />
-        </div>
-      </section>
+      <PageHeader
+        title="Des Services d'Excellence"
+        subtitle="Un accompagnement complet et personnalisé pour tous vos projets immobiliers."
+        breadcrumbs={[{ label: "Services" }]}
+      />
 
-      <section className="py-20 bg-warm-white">
+      <section className="py-16 bg-warm-white">
         <div className="container mx-auto px-4 lg:px-8">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             {services.map((service, i) => (
-              <div key={i} className="bg-card border border-border rounded-lg p-8 hover:border-gold hover:shadow-lg transition-all group">
-                <service.icon className="h-10 w-10 text-gold mb-4" />
-                <h3 className="text-xl font-serif font-semibold text-foreground mb-3">{service.title}</h3>
-                <p className="text-sm font-sans text-muted-foreground leading-relaxed mb-6">{service.desc}</p>
+              <div key={i} className="bg-card border border-border rounded-lg p-8 hover:border-gold transition-all group">
+                <service.icon className="h-8 w-8 text-gold mb-4" />
+                <h3 className="text-lg font-serif font-semibold text-foreground mb-3">{service.title}</h3>
+                <p className="text-sm font-sans text-muted-foreground leading-relaxed mb-5">{service.desc}</p>
                 <ul className="grid grid-cols-2 gap-2">
                   {service.features.map((f, j) => (
                     <li key={j} className="flex items-center gap-2 text-sm font-sans text-muted-foreground">
@@ -79,21 +76,26 @@ const Services = () => {
         </div>
       </section>
 
-      <section className="py-20 bg-charcoal text-center">
+      {/* CTA */}
+      <section className="py-16 bg-warm-beige border-t border-border">
         <div className="container mx-auto px-4 lg:px-8">
-          <h2 className="text-3xl font-serif font-bold text-primary-foreground mb-6">
-            Un Projet en Tête ?
-          </h2>
-          <p className="text-lg font-sans text-primary-foreground/70 max-w-2xl mx-auto mb-10">
-            Nos conseillers sont à votre disposition pour étudier votre projet et vous proposer les meilleures solutions.
-          </p>
-          <Link
-            to="/contact"
-            className="inline-flex items-center gap-2 px-10 py-4 bg-gold text-accent-foreground font-sans font-semibold text-sm tracking-wider uppercase rounded hover:opacity-90 transition-opacity"
-          >
-            Prendre Rendez-vous
-            <ChevronRight className="h-4 w-4" />
-          </Link>
+          <div className="flex flex-col md:flex-row items-center justify-between gap-6">
+            <div>
+              <h2 className="text-2xl font-serif font-bold text-foreground mb-2">
+                Un Projet en Tête ?
+              </h2>
+              <p className="text-sm font-sans text-muted-foreground max-w-lg">
+                Nos conseillers sont à votre disposition pour étudier votre projet et vous proposer les meilleures solutions.
+              </p>
+            </div>
+            <Link
+              to="/contact"
+              className="inline-flex items-center gap-2 px-8 py-3 bg-gold text-accent-foreground font-sans font-semibold text-sm tracking-wider uppercase rounded hover:opacity-90 transition-opacity shrink-0"
+            >
+              Prendre Rendez-vous
+              <ArrowRight className="h-4 w-4" />
+            </Link>
+          </div>
         </div>
       </section>
 

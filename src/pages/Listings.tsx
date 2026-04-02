@@ -1,15 +1,16 @@
 import { useState, useMemo } from "react";
-import { Link, useSearchParams } from "react-router-dom";
+import { useSearchParams } from "react-router-dom";
 import { Search, SlidersHorizontal, ChevronDown } from "lucide-react";
 import { properties, categories } from "@/data/properties";
 import PropertyCard from "@/components/PropertyCard";
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
+import PageHeader from "@/components/layout/PageHeader";
 
 const Listings = () => {
   const [searchParams] = useSearchParams();
   const initialCategory = searchParams.get("category") || "";
-  
+
   const [search, setSearch] = useState("");
   const [category, setCategory] = useState(initialCategory);
   const [sortBy, setSortBy] = useState("default");
@@ -21,13 +22,10 @@ const Listings = () => {
 
   const filtered = useMemo(() => {
     let result = [...properties];
-
     if (search) {
       const s = search.toLowerCase();
       result = result.filter(
-        (p) =>
-          p.title.toLowerCase().includes(s) ||
-          p.location.toLowerCase().includes(s)
+        (p) => p.title.toLowerCase().includes(s) || p.location.toLowerCase().includes(s)
       );
     }
     if (category) result = result.filter((p) => p.category === category);
@@ -35,11 +33,9 @@ const Listings = () => {
     if (maxPrice) result = result.filter((p) => p.priceValue <= Number(maxPrice));
     if (minArea) result = result.filter((p) => p.area >= Number(minArea));
     if (bedrooms) result = result.filter((p) => p.bedrooms >= Number(bedrooms));
-
     if (sortBy === "price-asc") result.sort((a, b) => a.priceValue - b.priceValue);
     if (sortBy === "price-desc") result.sort((a, b) => b.priceValue - a.priceValue);
     if (sortBy === "area-desc") result.sort((a, b) => b.area - a.area);
-
     return result;
   }, [search, category, sortBy, minPrice, maxPrice, minArea, bedrooms]);
 
@@ -47,19 +43,16 @@ const Listings = () => {
     <div className="min-h-screen">
       <Header />
 
-      <section className="pt-28 pb-12 bg-warm-beige">
-        <div className="container mx-auto px-4 lg:px-8">
-          <p className="text-gold font-sans text-sm tracking-[0.2em] uppercase mb-3">Notre Portfolio</p>
-          <h1 className="text-3xl md:text-5xl font-serif font-bold text-foreground mb-4">
-            Nos Biens Immobiliers
-          </h1>
-          <div className="w-16 h-[2px] bg-gold" />
-        </div>
-      </section>
+      <PageHeader
+        title="Nos Biens Immobiliers"
+        subtitle="Parcourez notre sélection de propriétés de prestige à travers le Maroc."
+        breadcrumbs={[{ label: "Nos Biens" }]}
+      />
 
-      <section className="py-8 bg-card border-b border-border sticky top-20 z-40">
+      {/* Filters */}
+      <section className="py-5 bg-card border-b border-border sticky top-[5rem] lg:top-[7.5rem] z-40">
         <div className="container mx-auto px-4 lg:px-8">
-          <div className="flex flex-col md:flex-row gap-4 items-center">
+          <div className="flex flex-col md:flex-row gap-3 items-center">
             <div className="relative flex-1 w-full">
               <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
               <input
@@ -67,13 +60,13 @@ const Listings = () => {
                 placeholder="Rechercher par titre ou localisation..."
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
-                className="w-full pl-10 pr-4 py-3 rounded bg-secondary text-foreground font-sans text-sm border-0 outline-none placeholder:text-muted-foreground"
+                className="w-full pl-10 pr-4 py-2.5 rounded bg-secondary text-foreground font-sans text-sm border-0 outline-none placeholder:text-muted-foreground"
               />
             </div>
             <select
               value={category}
               onChange={(e) => setCategory(e.target.value)}
-              className="px-4 py-3 rounded bg-secondary text-foreground font-sans text-sm border-0 outline-none"
+              className="px-4 py-2.5 rounded bg-secondary text-foreground font-sans text-sm border-0 outline-none"
             >
               <option value="">Toutes catégories</option>
               {categories.map((c) => (
@@ -83,7 +76,7 @@ const Listings = () => {
             <select
               value={sortBy}
               onChange={(e) => setSortBy(e.target.value)}
-              className="px-4 py-3 rounded bg-secondary text-foreground font-sans text-sm border-0 outline-none"
+              className="px-4 py-2.5 rounded bg-secondary text-foreground font-sans text-sm border-0 outline-none"
             >
               <option value="default">Trier par</option>
               <option value="price-asc">Prix croissant</option>
@@ -92,7 +85,7 @@ const Listings = () => {
             </select>
             <button
               onClick={() => setShowFilters(!showFilters)}
-              className="flex items-center gap-2 px-4 py-3 rounded border border-border text-foreground font-sans text-sm hover:border-gold transition-colors"
+              className="flex items-center gap-2 px-4 py-2.5 rounded border border-border text-foreground font-sans text-sm hover:border-gold transition-colors"
             >
               <SlidersHorizontal className="h-4 w-4" />
               Filtres
@@ -104,43 +97,23 @@ const Listings = () => {
             <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mt-4 pt-4 border-t border-border">
               <div>
                 <label className="text-xs font-sans text-muted-foreground mb-1 block">Prix min (MAD)</label>
-                <input
-                  type="number"
-                  placeholder="0"
-                  value={minPrice}
-                  onChange={(e) => setMinPrice(e.target.value)}
-                  className="w-full px-4 py-2 rounded bg-secondary text-foreground font-sans text-sm border-0 outline-none"
-                />
+                <input type="number" placeholder="0" value={minPrice} onChange={(e) => setMinPrice(e.target.value)}
+                  className="w-full px-4 py-2 rounded bg-secondary text-foreground font-sans text-sm border-0 outline-none" />
               </div>
               <div>
                 <label className="text-xs font-sans text-muted-foreground mb-1 block">Prix max (MAD)</label>
-                <input
-                  type="number"
-                  placeholder="∞"
-                  value={maxPrice}
-                  onChange={(e) => setMaxPrice(e.target.value)}
-                  className="w-full px-4 py-2 rounded bg-secondary text-foreground font-sans text-sm border-0 outline-none"
-                />
+                <input type="number" placeholder="∞" value={maxPrice} onChange={(e) => setMaxPrice(e.target.value)}
+                  className="w-full px-4 py-2 rounded bg-secondary text-foreground font-sans text-sm border-0 outline-none" />
               </div>
               <div>
                 <label className="text-xs font-sans text-muted-foreground mb-1 block">Surface min (m²)</label>
-                <input
-                  type="number"
-                  placeholder="0"
-                  value={minArea}
-                  onChange={(e) => setMinArea(e.target.value)}
-                  className="w-full px-4 py-2 rounded bg-secondary text-foreground font-sans text-sm border-0 outline-none"
-                />
+                <input type="number" placeholder="0" value={minArea} onChange={(e) => setMinArea(e.target.value)}
+                  className="w-full px-4 py-2 rounded bg-secondary text-foreground font-sans text-sm border-0 outline-none" />
               </div>
               <div>
                 <label className="text-xs font-sans text-muted-foreground mb-1 block">Chambres min</label>
-                <input
-                  type="number"
-                  placeholder="0"
-                  value={bedrooms}
-                  onChange={(e) => setBedrooms(e.target.value)}
-                  className="w-full px-4 py-2 rounded bg-secondary text-foreground font-sans text-sm border-0 outline-none"
-                />
+                <input type="number" placeholder="0" value={bedrooms} onChange={(e) => setBedrooms(e.target.value)}
+                  className="w-full px-4 py-2 rounded bg-secondary text-foreground font-sans text-sm border-0 outline-none" />
               </div>
             </div>
           )}
@@ -159,7 +132,7 @@ const Listings = () => {
               ))}
             </div>
           ) : (
-            <div className="text-center py-20">
+            <div className="text-center py-16">
               <p className="text-lg font-serif text-foreground mb-2">Aucun bien trouvé</p>
               <p className="text-sm font-sans text-muted-foreground">Essayez de modifier vos critères de recherche.</p>
             </div>
